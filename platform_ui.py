@@ -33,34 +33,6 @@ def editable_markdown(filename: str, fallback: str) -> str:
 
 
 def apply_global_style() -> None:
-    engineering_pattern = """<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900">
-      <defs>
-        <pattern id="grid" width="56" height="56" patternUnits="userSpaceOnUse">
-          <path d="M56 0H0V56" fill="none" stroke="#155987" stroke-width="0.7" opacity="0.18"/>
-        </pattern>
-      </defs>
-      <rect width="1400" height="900" fill="url(#grid)" opacity="0.34"/>
-      <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M-80 180C180 40 360 310 620 170S1030 60 1480 250" stroke="#155987" stroke-width="3" opacity="0.10"/>
-        <path d="M-80 194C180 54 360 324 620 184S1030 74 1480 264" stroke="#275d38" stroke-width="1.4" opacity="0.09"/>
-        <path d="M90 720C310 470 510 820 760 610S1120 440 1450 660" stroke="#275d38" stroke-width="4" opacity="0.08"/>
-        <path d="M90 736C310 486 510 836 760 626S1120 456 1450 676" stroke="#155987" stroke-width="1.5" opacity="0.08"/>
-        <path d="M170 120L410 320 660 210 930 390 1210 220" stroke="#155987" stroke-width="1.2" opacity="0.10"/>
-        <path d="M250 590L510 430 780 690 1080 520 1320 590" stroke="#275d38" stroke-width="1.2" opacity="0.09"/>
-      </g>
-      <g fill="#ffffff" stroke="#155987" stroke-width="2" opacity="0.13">
-        <circle cx="170" cy="120" r="8"/><circle cx="410" cy="320" r="8"/><circle cx="660" cy="210" r="8"/>
-        <circle cx="930" cy="390" r="8"/><circle cx="1210" cy="220" r="8"/><circle cx="250" cy="590" r="8"/>
-        <circle cx="510" cy="430" r="8"/><circle cx="780" cy="690" r="8"/><circle cx="1080" cy="520" r="8"/>
-      </g>
-      <g fill="#155987" opacity="0.055" font-family="Georgia,serif" font-size="31">
-        <text x="85" y="410">σₕ = pD / 2t</text><text x="1050" y="470">g(X) = R − S</text>
-        <text x="740" y="115">Pᶠ ≈ n(g≤0) / N</text><text x="410" y="820">Risk = Likelihood × Consequence</text>
-      </g>
-    </svg>"""
-    engineering_pattern_uri = base64.b64encode(
-        engineering_pattern.encode("utf-8")
-    ).decode("ascii")
     style = """
         <style>
         :root {
@@ -69,41 +41,31 @@ def apply_global_style() -> None:
             --ink: #14251c; --muted: #5b6961; --line: #d8e2da;
         }
         .stApp {
-            background-color: #f7faf8;
-            background-image:
-                radial-gradient(circle at 88% 8%, rgba(21,89,135,.10), transparent 29rem),
-                radial-gradient(circle at 7% 36%, rgba(255,219,5,.08), transparent 24rem),
-                radial-gradient(circle at 78% 80%, rgba(39,93,56,.08), transparent 28rem),
-                url("data:image/svg+xml;base64,__ENGINEERING_PATTERN__");
-            background-size: auto, auto, auto, 1400px 900px;
-            background-attachment: fixed;
+            background: #ffffff;
         }
-        [data-testid="stHeader"] { background: rgba(247,250,248,.78);
-            backdrop-filter: blur(13px); border-bottom: 1px solid rgba(39,93,56,.08); }
-        [data-testid="stSidebar"] { background: rgba(242,247,243,.93);
-            backdrop-filter: blur(14px); border-right: 1px solid rgba(39,93,56,.12);
-            box-shadow: 8px 0 30px rgba(20,49,32,.035); }
+        [data-testid="stHeader"] { background: rgba(255,255,255,.94);
+            backdrop-filter: blur(13px); border-bottom: 1px solid #eef2ef; }
+        [data-testid="stSidebar"] { background: #f7f9f7;
+            border-right: 1px solid #e3eae5; box-shadow: 8px 0 28px rgba(20,49,32,.025); }
         .block-container { max-width: 1200px; padding-top: 1.35rem; padding-bottom: 4rem; }
         .platform-hero, .project-hero {
             position: relative; overflow: hidden; padding: 1.55rem 1.75rem 1.7rem;
-            background: linear-gradient(118deg,rgba(255,255,255,.97),rgba(243,249,246,.91));
+            background: linear-gradient(112deg,#ffffff 0%,#ffffff 62%,#f3f8f5 100%);
             border: 1px solid rgba(39,93,56,.18);
-            border-top: 7px solid var(--ua-green); border-radius: 20px;
-            box-shadow: 0 18px 46px rgba(20,49,32,.10);
-            backdrop-filter: blur(10px);
+            border-top: 6px solid var(--ua-green); border-radius: 20px;
+            box-shadow: 0 14px 38px rgba(20,49,32,.075);
         }
         .platform-hero::before, .project-hero::before {
-            content: ""; position: absolute; inset: 0; pointer-events: none;
-            background-image: linear-gradient(rgba(21,89,135,.045) 1px,transparent 1px),
-                linear-gradient(90deg,rgba(21,89,135,.045) 1px,transparent 1px);
-            background-size: 34px 34px;
-            mask-image: linear-gradient(90deg,transparent 36%,#000 100%);
+            content: ""; position: absolute; width: 430px; height: 230px;
+            right: -88px; bottom: -88px; pointer-events: none;
+            border: 2px solid rgba(21,89,135,.08); border-radius: 50%;
+            box-shadow: 0 0 0 26px rgba(39,93,56,.035),
+                0 0 0 58px rgba(21,89,135,.025);
         }
         .platform-hero::after, .project-hero::after {
             content: ""; position: absolute; width: 190px; height: 190px;
             right: -72px; top: -92px; border-radius: 50%;
-            background: radial-gradient(circle,rgba(255,219,5,.34) 0 38%,transparent 39% 58%,rgba(21,89,135,.11) 59% 61%,transparent 62%);
-            opacity: .78;
+            background: var(--ua-gold); opacity: .16;
         }
         .platform-hero > *, .project-hero > * { position: relative; z-index: 1; }
         .brand-logo-ua, .brand-logo-alirim { box-sizing: border-box; display: inline-block;
@@ -211,6 +173,59 @@ def apply_global_style() -> None:
         .ili-picture { width: 100%; max-height: 118px; object-fit: contain; }
         .notice { margin: 1rem 0; padding: .9rem 1rem; color: #405047; background: #eef4ef;
             border-left: 4px solid var(--ua-green); border-radius: 6px; }
+        .learning-card-grid { display: grid;
+            grid-template-columns: repeat(auto-fit,minmax(205px,1fr)); gap: 1rem;
+            margin: 1rem 0 1.7rem; }
+        .learning-box { position: relative; min-height: 175px; padding: 1.15rem 1.15rem 1.2rem;
+            border: 1px solid #dce7df; border-radius: 17px;
+            background: linear-gradient(145deg,#f4f8f5,#ffffff 74%);
+            box-shadow: 0 9px 24px rgba(20,49,32,.055);
+            transition: transform .18s ease, box-shadow .18s ease; }
+        .learning-box:nth-child(3n+2) { border-color: #d9e7f0;
+            background: linear-gradient(145deg,#f1f7fb,#ffffff 74%); }
+        .learning-box:nth-child(3n+3) { border-color: #ebe5c7;
+            background: linear-gradient(145deg,#fffbed,#ffffff 74%); }
+        .learning-box:hover { transform: translateY(-3px);
+            box-shadow: 0 14px 30px rgba(20,49,32,.09); }
+        .learning-box-top { display: flex; align-items: center; gap: .6rem; margin-bottom: .85rem; }
+        .learning-box-number { display: inline-grid; place-items: center; width: 42px; height: 42px;
+            color: #fff; background: var(--ua-green); border-radius: 12px;
+            font-weight: 900; font-size: .86rem; box-shadow: 0 6px 14px rgba(39,93,56,.17); }
+        .learning-box:nth-child(3n+2) .learning-box-number { background: var(--alirim-blue); }
+        .learning-box:nth-child(3n+3) .learning-box-number { color: #173d27; background: var(--ua-gold); }
+        .learning-box-label { color: #6b7770; font-size: .72rem; font-weight: 850;
+            letter-spacing: .1em; text-transform: uppercase; }
+        .learning-box h3 { margin: 0 0 .42rem; color: var(--ink); font-size: 1.08rem; }
+        .learning-box p { margin: 0; color: var(--muted); font-size: .91rem; line-height: 1.48; }
+        .learning-path-grid { display: grid; grid-template-columns: repeat(5,minmax(0,1fr));
+            gap: .7rem; margin: 1rem 0 1.5rem; }
+        .learning-path-item { position: relative; padding: 1rem .9rem; min-height: 145px;
+            border: 1px solid #e0e8e2; border-radius: 15px; background: #f7faf8; }
+        .learning-path-item::after { content: "→"; position: absolute; right: -.58rem; top: 1.05rem;
+            z-index: 2; color: var(--alirim-blue); font-weight: 900; }
+        .learning-path-item:last-child::after { display: none; }
+        .learning-path-number { display: inline-grid; place-items: center; width: 34px; height: 34px;
+            margin-bottom: .65rem; color: #fff; background: var(--alirim-blue);
+            border-radius: 50%; font-size: .76rem; font-weight: 900; }
+        .learning-path-item p { margin: 0; color: #405047; font-size: .82rem; line-height: 1.4; }
+        .module-choice-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr));
+            gap: 1rem; margin: 1rem 0 1.5rem; }
+        .module-choice { display: block; min-height: 190px; padding: 1.25rem 1.35rem;
+            color: var(--ink) !important; text-decoration: none !important;
+            border: 1px solid #dce7df; border-radius: 18px;
+            background: linear-gradient(135deg,#f2f7f3,#ffffff);
+            box-shadow: 0 10px 26px rgba(20,49,32,.06);
+            transition: transform .18s ease, box-shadow .18s ease; }
+        .module-choice:last-child { border-color: #d9e7f0;
+            background: linear-gradient(135deg,#f0f6fa,#ffffff); }
+        .module-choice:hover { transform: translateY(-4px);
+            box-shadow: 0 16px 34px rgba(20,49,32,.11); }
+        .module-choice-kicker { color: var(--ua-green); font-size: .73rem; font-weight: 900;
+            letter-spacing: .1em; text-transform: uppercase; }
+        .module-choice h3 { margin: .55rem 0 .45rem; font-size: 1.35rem; }
+        .module-choice p { color: var(--muted); font-size: .92rem; line-height: 1.48; }
+        .module-choice-action { display: block; margin-top: .9rem; color: var(--ua-green);
+            font-weight: 900; }
         [data-testid="stMetric"] { padding: .8rem 1rem; background: rgba(255,255,255,.86);
             border: 1px solid rgba(39,93,56,.12); border-radius: 14px;
             box-shadow: 0 7px 20px rgba(20,49,32,.045); backdrop-filter: blur(7px); }
@@ -224,7 +239,11 @@ def apply_global_style() -> None:
         .stButton > button:hover, .stLinkButton > a:hover { transform: translateY(-1px);
             box-shadow: 0 7px 18px rgba(20,49,32,.11); }
         h2, h3 { letter-spacing: -.015em; }
-        @media (max-width: 850px) { .app-grid, .learning-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 850px) {
+            .app-grid, .learning-grid, .module-choice-grid { grid-template-columns: 1fr; }
+            .learning-path-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+            .learning-path-item::after { display: none; }
+        }
         @media (max-width: 700px) {
             .people-grid { grid-template-columns: 1fr; }
             .person-card img { width: 84px; height: 84px; flex-basis: 84px; }
@@ -243,10 +262,7 @@ def apply_global_style() -> None:
         }
         </style>
         """
-    st.markdown(
-        style.replace("__ENGINEERING_PATTERN__", engineering_pattern_uri),
-        unsafe_allow_html=True,
-    )
+    st.markdown(style, unsafe_allow_html=True)
 
 
 def brand_logos(*, compact: bool = False) -> str:
@@ -331,6 +347,77 @@ def render_project_hero(kicker: str, title: str, description: str) -> None:
         '</section>'
     )
     st.markdown(hero, unsafe_allow_html=True)
+
+
+def render_learning_cards(
+    cards: list[tuple[str, str]], *, label: str = "Step"
+) -> None:
+    """Render short learning ideas as shaded, numbered cards."""
+
+    safe_label = html.escape(label)
+    rendered_cards = []
+    for index, (title, body) in enumerate(cards, start=1):
+        rendered_cards.append(
+            '<article class="learning-box">'
+            '<div class="learning-box-top">'
+            f'<span class="learning-box-number">{index:02d}</span>'
+            f'<span class="learning-box-label">{safe_label}</span>'
+            '</div>'
+            f'<h3>{html.escape(title)}</h3>'
+            f'<p>{html.escape(body)}</p>'
+            '</article>'
+        )
+    st.markdown(
+        '<section class="learning-card-grid">'
+        + "".join(rendered_cards)
+        + '</section>',
+        unsafe_allow_html=True,
+    )
+
+
+def render_learning_path(steps: list[str]) -> None:
+    """Render a compact chapter pathway with a clear beginning and end."""
+
+    rendered_steps = []
+    for index, step in enumerate(steps, start=1):
+        rendered_steps.append(
+            '<article class="learning-path-item">'
+            f'<span class="learning-path-number">{index:02d}</span>'
+            f'<p>{html.escape(step)}</p>'
+            '</article>'
+        )
+    st.markdown(
+        '<section class="learning-path-grid" aria-label="Learning pathway">'
+        + "".join(rendered_steps)
+        + '</section>',
+        unsafe_allow_html=True,
+    )
+
+
+def render_education_module_choices() -> None:
+    """Render the two education routes as large navigation cards."""
+
+    st.markdown(
+        """
+        <section class="module-choice-grid" aria-label="Education modules">
+          <a class="module-choice" href="/education" target="_self">
+            <span class="module-choice-kicker">Recommended starting point</span>
+            <h3>Learning Book</h3>
+            <p>Follow ten short chapters from basic mechanics to pipeline risk, with
+            interactive examples and knowledge checks.</p>
+            <span class="module-choice-action">Start learning →</span>
+          </a>
+          <a class="module-choice" href="/analysis-lab" target="_self">
+            <span class="module-choice-kicker">Explore more parameters</span>
+            <h3>Analysis Lab</h3>
+            <p>Use the detailed deterministic and probabilistic tools after learning
+            the main concepts.</p>
+            <span class="module-choice-action">Open the lab →</span>
+          </a>
+        </section>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 def render_external_cta(

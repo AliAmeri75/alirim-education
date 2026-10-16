@@ -17,7 +17,7 @@ from education.visuals import (
     pipe_defect_figure,
     render_linked_defect_views,
 )
-from platform_ui import render_project_hero
+from platform_ui import render_learning_cards, render_learning_path, render_project_hero
 
 
 STATICS_URL = "https://engcourses-uofa.ca/books/statics/"
@@ -57,11 +57,7 @@ def _go_to_chapter(index: int) -> None:
 
 
 def _concept_cards(cards: list[tuple[str, str]]) -> None:
-    columns = st.columns(len(cards))
-    for column, (title, body) in zip(columns, cards):
-        with column:
-            st.markdown(f"### {title}")
-            st.write(body)
+    render_learning_cards(cards, label="Key idea")
 
 
 def _checkpoint(question: str, options: list[str], correct: str, key: str) -> None:
@@ -90,14 +86,14 @@ def chapter_welcome() -> None:
     )
 
     st.subheader("The learning story")
-    st.markdown(
-        """
-        1. Internal pressure produces forces and stresses in the pipe wall.
-        2. Cracks and corrosion remove or damage material.
-        3. A **limit state** separates an acceptable condition from a failure condition.
-        4. Uncertain inputs make the failure condition uncertain.
-        5. Risk combines the likelihood of failure with its consequences.
-        """
+    render_learning_path(
+        [
+            "Pressure produces forces and stresses in the pipe wall.",
+            "Cracks and corrosion damage or remove material.",
+            "A limit state separates margin from failure.",
+            "Uncertain inputs make failure uncertain.",
+            "Risk combines likelihood with consequences.",
+        ]
     )
 
     st.info(

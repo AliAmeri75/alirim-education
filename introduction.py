@@ -2,7 +2,12 @@
 
 import streamlit as st
 
-from platform_ui import editable_markdown, render_project_hero
+from platform_ui import (
+    editable_markdown,
+    render_education_module_choices,
+    render_learning_cards,
+    render_project_hero,
+)
 
 
 render_project_hero(
@@ -14,32 +19,17 @@ render_project_hero(
 st.markdown(editable_markdown("INTRODUCTION.md", "Add the introduction in `content/INTRODUCTION.md`."))
 
 st.markdown("## Start with three simple steps")
-step_one, step_two, step_three = st.columns(3)
-with step_one:
-    st.markdown("### 1. Choose inputs")
-    st.write("Set pipe, material, crack, and operating-pressure values.")
-with step_two:
-    st.markdown("### 2. Explore results")
-    st.write("See how crack depth, crack length, and uncertainty change the result.")
-with step_three:
-    st.markdown("### 3. Check learning")
-    st.write("Interpret the figures and answer a short knowledge-check question.")
+render_learning_cards(
+    [
+        ("Learn one idea", "Begin with a short explanation and a simple engineering example."),
+        ("Explore the model", "Change the inputs and observe how the visual result responds."),
+        ("Check understanding", "Answer a quick question before moving to the next concept."),
+    ],
+    label="Step",
+)
 
-start_col, lab_col = st.columns(2)
-with start_col:
-    st.page_link(
-        "education/book.py",
-        label="Start the Learning Book",
-        icon=":material/menu_book:",
-        width="stretch",
-    )
-with lab_col:
-    st.page_link(
-        "education/tutorial.py",
-        label="Open the Analysis Lab",
-        icon=":material/science:",
-        width="stretch",
-    )
+st.markdown("## Choose your learning mode")
+render_education_module_choices()
 
 st.markdown(
     """
