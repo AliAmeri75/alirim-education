@@ -1,9 +1,15 @@
 #!/usr/bin/env python3
 """Entrypoint for the standalone ALIRIM Education application."""
 
+from importlib import reload
+
 import streamlit as st
 
-from platform_ui import apply_global_style
+import platform_ui
+
+
+# Keep shared UI components current when Streamlit Cloud hot-reloads the app.
+platform_ui = reload(platform_ui)
 
 
 st.set_page_config(
@@ -12,7 +18,7 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
 )
-apply_global_style()
+platform_ui.apply_global_style()
 
 introduction = st.Page(
     "introduction.py",
