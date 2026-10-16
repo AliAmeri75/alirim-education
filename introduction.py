@@ -25,12 +25,21 @@ with step_three:
     st.markdown("### 3. Check learning")
     st.write("Interpret the figures and answer a short knowledge-check question.")
 
-st.page_link(
-    "education/tutorial.py",
-    label="Open the Educational Module",
-    icon=":material/school:",
-    use_container_width=True,
-)
+start_col, lab_col = st.columns(2)
+with start_col:
+    st.page_link(
+        "education/book.py",
+        label="Start the Learning Book",
+        icon=":material/menu_book:",
+        width="stretch",
+    )
+with lab_col:
+    st.page_link(
+        "education/tutorial.py",
+        label="Open the Analysis Lab",
+        icon=":material/science:",
+        width="stretch",
+    )
 
 st.markdown(
     """

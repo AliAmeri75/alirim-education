@@ -20,11 +20,17 @@ introduction = st.Page(
     icon=":material/home:",
     default=True,
 )
-educational_module = st.Page(
-    "education/tutorial.py",
-    title="Educational Module",
-    icon=":material/school:",
+learning_book = st.Page(
+    "education/book.py",
+    title="Learning Book",
+    icon=":material/menu_book:",
     url_path="education",
+)
+analysis_lab = st.Page(
+    "education/tutorial.py",
+    title="Analysis Lab",
+    icon=":material/science:",
+    url_path="analysis-lab",
 )
 team = st.Page(
     "team.py",
@@ -35,7 +41,7 @@ team = st.Page(
 
 navigation = st.navigation(
     {
-        "ALIRIM Education": [introduction, educational_module],
+        "ALIRIM Education": [introduction, learning_book, analysis_lab],
         "About": [team],
     }
 )

@@ -8,7 +8,9 @@ concepts through guided examples.
 ## Pages
 
 - **Introduction** — purpose, audience, and learning path.
-- **Educational Module** — deterministic failure-pressure-ratio and probabilistic
+- **Learning Book** — undergraduate chapters covering mechanics, pipe stresses,
+  defect geometry, limit states, consequences, CorLAS, and probability of failure.
+- **Analysis Lab** — detailed deterministic failure-pressure-ratio and probabilistic
   probability-of-failure exercises.
 - **Team** — project team, profiles, and contact information.
 

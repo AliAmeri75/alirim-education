@@ -1,15 +1,15 @@
 ## About this educational app
 
-ALIRIM Education helps university students and early-career learners understand
-pipeline integrity through guided, interactive examples.
+ALIRIM Education helps undergraduate and early-career learners understand pipeline
+integrity one concept at a time. No previous pipeline experience is required.
 
-The first module introduces two ideas:
+Begin with the **Learning Book**. It moves from forces, stress, and pressure in a pipe
+to crack and corrosion shapes, leakage and rupture, consequences, failure pressure,
+and probability of failure. Each chapter includes a short explanation, an interactive
+example, and a quick check.
 
-- **Deterministic analysis:** explore how crack depth and length affect predicted
-  failure pressure and the failure-pressure ratio.
-- **Probabilistic analysis:** represent uncertain inputs with probability
-  distributions and estimate probability of failure using simulation.
+After completing the book, open the **Analysis Lab** to change more inputs and explore
+deterministic and probabilistic calculations in greater detail.
 
-The app begins with these simple topics so lecturers and experts can evaluate whether
-the learning process is clear, useful, and suitable for teaching. More learning
-materials can be added gradually after this first version is tested.
+The app is a teaching prototype. Lecturer and student feedback will guide which
+examples, explanations, and exercises are developed next.
