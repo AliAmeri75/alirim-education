@@ -14,9 +14,8 @@ from education.pof_model import (
     simulate_probability_of_failure,
 )
 from education.visuals import (
-    defect_map_figure,
-    flat_defect_figure,
     pipe_defect_figure,
+    render_linked_defect_views,
 )
 from platform_ui import render_project_hero
 
@@ -293,21 +292,10 @@ def chapter_defect_shapes() -> None:
     st.dataframe(comparison, hide_index=True, width="stretch")
 
     defect_type, length_mm, depth_mm, width_mm = _defect_controls("shape")
-    map_col, surface_col = st.columns(2)
-    with map_col:
-        st.plotly_chart(
-            defect_map_figure(defect_type, length_mm, depth_mm, width_mm),
-            width="stretch",
-            config={"displaylogo": False},
-        )
-    with surface_col:
-        st.plotly_chart(
-            flat_defect_figure(defect_type, length_mm, depth_mm, width_mm),
-            width="stretch",
-            config={"displaylogo": False},
-        )
+    render_linked_defect_views(defect_type, length_mm, depth_mm, width_mm)
     st.caption(
-        "The shapes are smooth teaching illustrations, not measurements from an inspection tool."
+        "Move over either figure to follow the same location in both views. "
+        "The shapes are smooth teaching illustrations, not inspection measurements."
     )
 
     _checkpoint(

@@ -2,14 +2,18 @@
 
 from __future__ import annotations
 
+import json
+
 import numpy as np
 import plotly.graph_objects as go
+import streamlit as st
 
 
 GREEN = "#275d38"
 GOLD = "#ffdb05"
 BLUE = "#155987"
 RED = "#c62828"
+PLOTLY_CDN_URL = "https://cdn.plot.ly/plotly-3.3.0.min.js"
 
 
 def defect_depth_grid(
@@ -109,6 +113,227 @@ def flat_defect_figure(
         margin={"l": 0, "r": 0, "t": 55, "b": 0},
     )
     return figure
+
+
+def linked_defect_views_html(
+    defect_type: str,
+    length_mm: float,
+    depth_mm: float,
+    width_mm: float | None = None,
+) -> str:
+    """Return a linked 2D/3D Plotly explorer as one self-contained HTML view.
+
+    Hovering either plot moves the highlighted point in both plots. Keeping the
+    interaction in the browser makes the response immediate and avoids a full
+    Streamlit rerun for every mouse movement.
+    """
+
+    xx, yy, depth = defect_depth_grid(defect_type, length_mm, depth_mm, width_mm)
+    center_row = depth.shape[0] // 2
+    center_column = depth.shape[1] // 2
+    center_x = float(xx[center_row, center_column])
+    center_y = float(yy[center_row, center_column])
+    center_depth = float(depth[center_row, center_column])
+
+    map_figure = defect_map_figure(defect_type, length_mm, depth_mm, width_mm)
+    map_figure.add_trace(
+        go.Scatter(
+            x=[center_x],
+            y=[center_y],
+            mode="markers",
+            name="Linked point",
+            marker={
+                "size": 14,
+                "color": GOLD,
+                "line": {"color": "#14251c", "width": 2},
+            },
+            hovertemplate=(
+                "Linked point<br>Axial: %{x:.1f} mm<br>"
+                "Circumferential: %{y:.1f} mm<extra></extra>"
+            ),
+            showlegend=False,
+        )
+    )
+    map_figure.update_layout(
+        height=440,
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="#fbfdfc",
+        font={"family": "Inter, Arial, sans-serif", "color": "#14251c"},
+        hovermode="closest",
+    )
+
+    surface_figure = flat_defect_figure(
+        defect_type, length_mm, depth_mm, width_mm
+    )
+    surface_figure.add_trace(
+        go.Scatter3d(
+            x=[center_x],
+            y=[center_y],
+            z=[-center_depth],
+            mode="markers",
+            name="Linked point",
+            marker={
+                "size": 7,
+                "color": GOLD,
+                "line": {"color": "#14251c", "width": 3},
+            },
+            hovertemplate=(
+                "Linked point<br>Axial: %{x:.1f} mm<br>"
+                "Circumferential: %{y:.1f} mm<br>"
+                "Surface level: %{z:.2f} mm<extra></extra>"
+            ),
+            showlegend=False,
+        )
+    )
+    surface_figure.update_layout(
+        height=440,
+        paper_bgcolor="rgba(0,0,0,0)",
+        font={"family": "Inter, Arial, sans-serif", "color": "#14251c"},
+        hovermode="closest",
+    )
+    surface_figure.update_scenes(
+        bgcolor="#fbfdfc",
+        xaxis={"showspikes": True, "spikecolor": BLUE},
+        yaxis={"showspikes": True, "spikecolor": BLUE},
+        zaxis={"showspikes": True, "spikecolor": BLUE},
+    )
+
+    map_json = map_figure.to_json()
+    surface_json = surface_figure.to_json()
+    x_json = json.dumps(xx[0].tolist())
+    y_json = json.dumps(yy[:, 0].tolist())
+    depth_json = json.dumps(depth.tolist())
+    initial_readout = (
+        f"Axial: {center_x:.1f} mm &nbsp;•&nbsp; "
+        f"Circumferential: {center_y:.1f} mm &nbsp;•&nbsp; "
+        f"Depth: {center_depth:.2f} mm"
+    )
+
+    return f"""<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="{PLOTLY_CDN_URL}"></script>
+  <style>
+    * {{ box-sizing: border-box; }}
+    body {{ margin: 0; color: #14251c; background: transparent;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }}
+    .linked-shell {{ padding: 10px; border: 1px solid #d8e2da; border-radius: 18px;
+      background: rgba(255,255,255,.93); box-shadow: 0 12px 30px rgba(20,49,32,.08); }}
+    .linked-header {{ display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; padding: 2px 8px 8px; flex-wrap: wrap; }}
+    .linked-title {{ font-weight: 850; font-size: 15px; color: #173d27; }}
+    .linked-hint {{ color: #5b6961; font-size: 12px; }}
+    .plot-grid {{ display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+      gap: 8px; }}
+    .plot-panel {{ min-width: 0; border: 1px solid #e5ece7; border-radius: 14px;
+      overflow: hidden; background: #fbfdfc; }}
+    .plot {{ width: 100%; height: 440px; }}
+    #linked-readout {{ margin: 9px 8px 3px; padding: 9px 12px; border-radius: 10px;
+      color: #173d27; background: #f1f6f2; border-left: 4px solid #ffdb05;
+      font-size: 13px; font-variant-numeric: tabular-nums; }}
+    #linked-error {{ display: none; margin: 12px; padding: 12px; color: #8b1a1a;
+      background: #fff1f1; border-radius: 10px; }}
+    @media (max-width: 720px) {{
+      .plot-grid {{ grid-template-columns: 1fr; }}
+      .plot {{ height: 390px; }}
+    }}
+  </style>
+</head>
+<body>
+  <section class="linked-shell" aria-label="Linked two-dimensional and three-dimensional defect views">
+    <div class="linked-header">
+      <span class="linked-title">Linked defect explorer</span>
+      <span class="linked-hint">Move over either view—the gold point follows in both.</span>
+    </div>
+    <div id="linked-error">The interactive figures could not be loaded. Please refresh the page.</div>
+    <div class="plot-grid">
+      <div class="plot-panel"><div id="defect-map" class="plot"></div></div>
+      <div class="plot-panel"><div id="defect-surface" class="plot"></div></div>
+    </div>
+    <div id="linked-readout">{initial_readout}</div>
+  </section>
+  <script>
+  (() => {{
+    const errorBox = document.getElementById("linked-error");
+    if (typeof Plotly === "undefined") {{
+      errorBox.style.display = "block";
+      return;
+    }}
+
+    const mapFigure = {map_json};
+    const surfaceFigure = {surface_json};
+    const xValues = {x_json};
+    const yValues = {y_json};
+    const depthValues = {depth_json};
+    const mapDiv = document.getElementById("defect-map");
+    const surfaceDiv = document.getElementById("defect-surface");
+    const readout = document.getElementById("linked-readout");
+    const config = {{ responsive: true, displaylogo: false,
+      modeBarButtonsToRemove: ["lasso2d", "select2d"] }};
+
+    const nearestIndex = (values, target) => {{
+      let best = 0;
+      let distance = Infinity;
+      for (let i = 0; i < values.length; i += 1) {{
+        const candidate = Math.abs(values[i] - target);
+        if (candidate < distance) {{ best = i; distance = candidate; }}
+      }}
+      return best;
+    }};
+
+    let pending = null;
+    let animationFrame = null;
+    const synchronize = (xTarget, yTarget) => {{
+      const column = nearestIndex(xValues, Number(xTarget));
+      const row = nearestIndex(yValues, Number(yTarget));
+      const x = xValues[column];
+      const y = yValues[row];
+      const depth = depthValues[row][column];
+      const label = `Axial: ${{x.toFixed(1)}} mm • Circumferential: ${{y.toFixed(1)}} mm • Depth: ${{depth.toFixed(2)}} mm`;
+
+      Plotly.restyle(mapDiv, {{ x: [[x]], y: [[y]] }}, [1]);
+      Plotly.restyle(surfaceDiv, {{ x: [[x]], y: [[y]], z: [[-depth]] }}, [1]);
+      readout.textContent = label;
+    }};
+
+    const scheduleSynchronization = (point) => {{
+      if (!point || !Number.isFinite(Number(point.x)) || !Number.isFinite(Number(point.y))) return;
+      pending = {{ x: Number(point.x), y: Number(point.y) }};
+      if (animationFrame !== null) return;
+      animationFrame = requestAnimationFrame(() => {{
+        synchronize(pending.x, pending.y);
+        animationFrame = null;
+      }});
+    }};
+
+    Promise.all([
+      Plotly.newPlot(mapDiv, mapFigure.data, mapFigure.layout, config),
+      Plotly.newPlot(surfaceDiv, surfaceFigure.data, surfaceFigure.layout, config)
+    ]).then(() => {{
+      mapDiv.on("plotly_hover", event => scheduleSynchronization(event.points[0]));
+      surfaceDiv.on("plotly_hover", event => scheduleSynchronization(event.points[0]));
+    }}).catch(() => {{ errorBox.style.display = "block"; }});
+  }})();
+  </script>
+</body>
+</html>"""
+
+
+def render_linked_defect_views(
+    defect_type: str,
+    length_mm: float,
+    depth_mm: float,
+    width_mm: float | None = None,
+) -> None:
+    """Render the linked explorer inside Streamlit."""
+
+    st.iframe(
+        linked_defect_views_html(defect_type, length_mm, depth_mm, width_mm),
+        height=550,
+        width="stretch",
+    )
 
 
 def pipe_defect_figure(

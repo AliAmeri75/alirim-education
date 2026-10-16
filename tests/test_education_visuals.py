@@ -6,6 +6,7 @@ from education.visuals import (
     defect_depth_grid,
     defect_map_figure,
     flat_defect_figure,
+    linked_defect_views_html,
     pipe_defect_figure,
 )
 
@@ -40,6 +41,15 @@ class EducationalVisualTests(unittest.TestCase):
         for figure in figures:
             self.assertEqual(len(figure.data), 1)
             self.assertGreater(len(figure.to_json()), 100)
+
+    def test_linked_explorer_synchronizes_hover_between_both_views(self):
+        linked_html = linked_defect_views_html("Crack", 80.0, 3.0)
+
+        self.assertIn('mapDiv.on("plotly_hover"', linked_html)
+        self.assertIn('surfaceDiv.on("plotly_hover"', linked_html)
+        self.assertIn("Plotly.restyle(mapDiv", linked_html)
+        self.assertIn("Plotly.restyle(surfaceDiv", linked_html)
+        self.assertIn("Move over either view", linked_html)
 
 
 if __name__ == "__main__":
