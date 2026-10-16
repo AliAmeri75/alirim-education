@@ -181,9 +181,9 @@ def chapter_pipe_stress() -> None:
         config={"displaylogo": False},
     )
     st.caption(
-        "Rotate the pipe with your mouse. Blue arrows wrap around the pipe (hoop "
-        "stress), green arrows run along the pipe (longitudinal stress), and yellow "
-        "arrows show internal pressure pushing outward."
+        "Rotate the cutaway pipe with your mouse. Orange arrows follow the curved "
+        "wall (hoop stress), green arrows run along the pipe (longitudinal stress), "
+        "and blue arrows show internal pressure pushing outward."
     )
 
     st.subheader("Interactive pipe-stress calculator")
