@@ -15,10 +15,14 @@ from education.pof_model import (
 )
 from education.visuals import (
     pipe_defect_figure,
-    pipe_stress_directions_figure,
     render_linked_defect_views,
 )
-from platform_ui import render_learning_cards, render_learning_path, render_project_hero
+from platform_ui import (
+    ASSET_DIR,
+    render_learning_cards,
+    render_learning_path,
+    render_project_hero,
+)
 
 
 STATICS_URL = "https://engcourses-uofa.ca/books/statics/"
@@ -174,16 +178,14 @@ def chapter_pipe_stress() -> None:
         "- $p$ is internal pressure, $D$ is diameter, and $t$ is wall thickness."
     )
 
-    st.subheader("See the directions in 3D")
-    st.plotly_chart(
-        pipe_stress_directions_figure(),
+    st.subheader("See the stress directions")
+    st.image(
+        ASSET_DIR / "pipe_stress_directions.svg",
         width="stretch",
-        config={"displaylogo": False},
     )
     st.caption(
-        "Rotate the cutaway pipe with your mouse. Orange arrows follow the curved "
-        "wall (hoop stress), green arrows run along the pipe (longitudinal stress), "
-        "and blue arrows show internal pressure pushing outward."
+        "Blue arrows show pressure pushing outward. Orange arrows show hoop stress "
+        "around the pipe. Green arrows show longitudinal stress along the pipe."
     )
 
     st.subheader("Interactive pipe-stress calculator")

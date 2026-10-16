@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" role="img" aria-labelledby="title description">
+  <title id="title">Stress directions in a pressurized pipe</title>
+  <desc id="description">Three simple diagrams show internal pressure pushing outward, hoop stress acting around the pipe, and longitudinal stress acting along the pipe.</desc>
+  <defs>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#155987"/>
+    </marker>
+    <marker id="arrow-orange" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#d96b27"/>
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#275d38"/>
+    </marker>
+    <filter id="soft-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#173d27" flood-opacity="0.08"/>
+    </filter>
+    <style>
+      .heading { font: 700 32px Arial, sans-serif; fill: #173d27; }
+      .panel-title { font: 700 25px Arial, sans-serif; }
+      .panel-text { font: 400 19px Arial, sans-serif; fill: #53645a; }
+      .symbol { font: italic 700 24px Georgia, serif; }
+      .pipe { fill: #edf3ef; stroke: #718378; stroke-width: 5; }
+      .pipe-inner { fill: #ffffff; stroke: #a8b8ad; stroke-width: 4; }
+      .arrow { fill: none; stroke-linecap: round; stroke-width: 7; }
+    </style>
+  </defs>
+
+  <rect x="12" y="12" width="1176" height="596" rx="26" fill="#ffffff" stroke="#d8e2da" stroke-width="2"/>
+  <text x="600" y="62" text-anchor="middle" class="heading">Stress directions in a pressurized pipe</text>
+
+  <g filter="url(#soft-shadow)">
+    <rect x="45" y="95" width="345" height="475" rx="22" fill="#ffffff" stroke="#dce6df" stroke-width="2"/>
+    <rect x="428" y="95" width="345" height="475" rx="22" fill="#ffffff" stroke="#dce6df" stroke-width="2"/>
+    <rect x="810" y="95" width="345" height="475" rx="22" fill="#ffffff" stroke="#dce6df" stroke-width="2"/>
+  </g>
+
+  <!-- Internal pressure -->
+  <g aria-label="Internal pressure pushes outward">
+    <text x="218" y="142" text-anchor="middle" class="panel-title" fill="#155987">Internal pressure <tspan class="symbol">p</tspan></text>
+    <text x="218" y="174" text-anchor="middle" class="panel-text">pushes outward</text>
+    <circle cx="218" cy="332" r="112" class="pipe"/>
+    <circle cx="218" cy="332" r="84" class="pipe-inner"/>
+    <circle cx="218" cy="332" r="12" fill="#155987"/>
+    <line x1="218" y1="314" x2="218" y2="246" class="arrow" stroke="#155987" marker-end="url(#arrow-blue)"/>
+    <line x1="236" y1="332" x2="304" y2="332" class="arrow" stroke="#155987" marker-end="url(#arrow-blue)"/>
+    <line x1="218" y1="350" x2="218" y2="418" class="arrow" stroke="#155987" marker-end="url(#arrow-blue)"/>
+    <line x1="200" y1="332" x2="132" y2="332" class="arrow" stroke="#155987" marker-end="url(#arrow-blue)"/>
+    <text x="218" y="496" text-anchor="middle" class="panel-text">Pressure acts normal to</text>
+    <text x="218" y="522" text-anchor="middle" class="panel-text">the inside wall.</text>
+  </g>
+
+  <!-- Hoop stress -->
+  <g aria-label="Hoop stress acts around the pipe circumference">
+    <text x="600" y="142" text-anchor="middle" class="panel-title" fill="#d96b27">Hoop stress <tspan class="symbol">σₕ</tspan></text>
+    <text x="600" y="174" text-anchor="middle" class="panel-text">acts around the pipe</text>
+    <circle cx="600" cy="332" r="112" class="pipe"/>
+    <circle cx="600" cy="332" r="84" class="pipe-inner"/>
+    <path d="M 492 300 A 112 112 0 0 1 632 224" class="arrow" stroke="#d96b27" marker-end="url(#arrow-orange)"/>
+    <path d="M 708 364 A 112 112 0 0 1 568 440" class="arrow" stroke="#d96b27" marker-end="url(#arrow-orange)"/>
+    <path d="M 632 440 A 112 112 0 0 1 708 300" class="arrow" stroke="#d96b27" marker-end="url(#arrow-orange)"/>
+    <path d="M 568 224 A 112 112 0 0 1 492 364" class="arrow" stroke="#d96b27" marker-end="url(#arrow-orange)"/>
+    <text x="600" y="496" text-anchor="middle" class="panel-text">The wall is pulled around</text>
+    <text x="600" y="522" text-anchor="middle" class="panel-text">the circumference.</text>
+  </g>
+
+  <!-- Longitudinal stress -->
+  <g aria-label="Longitudinal stress acts along the pipe axis">
+    <text x="982" y="142" text-anchor="middle" class="panel-title" fill="#275d38">Longitudinal stress <tspan class="symbol">σₗ</tspan></text>
+    <text x="982" y="174" text-anchor="middle" class="panel-text">acts along the pipe</text>
+    <rect x="872" y="272" width="220" height="120" class="pipe"/>
+    <ellipse cx="872" cy="332" rx="34" ry="60" class="pipe"/>
+    <ellipse cx="1092" cy="332" rx="34" ry="60" class="pipe"/>
+    <ellipse cx="1092" cy="332" rx="23" ry="44" class="pipe-inner"/>
+    <line x1="972" y1="246" x2="848" y2="246" class="arrow" stroke="#275d38" marker-end="url(#arrow-green)"/>
+    <line x1="992" y1="246" x2="1116" y2="246" class="arrow" stroke="#275d38" marker-end="url(#arrow-green)"/>
+    <line x1="972" y1="418" x2="848" y2="418" class="arrow" stroke="#275d38" marker-end="url(#arrow-green)"/>
+    <line x1="992" y1="418" x2="1116" y2="418" class="arrow" stroke="#275d38" marker-end="url(#arrow-green)"/>
+    <text x="982" y="496" text-anchor="middle" class="panel-text">The wall is pulled parallel</text>
+    <text x="982" y="522" text-anchor="middle" class="panel-text">to the pipe axis.</text>
+  </g>
+</svg>
