@@ -3,6 +3,8 @@
 A standalone Streamlit application for teaching introductory pipeline-integrity
 concepts through guided examples.
 
+**Live app:** <https://alirim-education.streamlit.app/>
+
 ## Pages
 
 - **Introduction** — purpose, audience, and learning path.
