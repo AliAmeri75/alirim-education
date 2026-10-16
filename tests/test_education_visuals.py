@@ -8,6 +8,7 @@ from education.visuals import (
     flat_defect_figure,
     linked_defect_views_html,
     pipe_defect_figure,
+    pipe_stress_directions_figure,
 )
 
 
@@ -50,6 +51,17 @@ class EducationalVisualTests(unittest.TestCase):
         self.assertIn("Plotly.restyle(mapDiv", linked_html)
         self.assertIn("Plotly.restyle(surfaceDiv", linked_html)
         self.assertIn("Move over either view", linked_html)
+
+    def test_pipe_stress_figure_shows_all_three_directions(self):
+        figure = pipe_stress_directions_figure()
+        names = {trace.name for trace in figure.data if trace.showlegend}
+        trace_types = {trace.type for trace in figure.data}
+
+        self.assertIn("Hoop stress — around the pipe", names)
+        self.assertIn("Longitudinal stress — along the pipe", names)
+        self.assertIn("Internal pressure — pushes outward", names)
+        self.assertIn("surface", trace_types)
+        self.assertIn("cone", trace_types)
 
 
 if __name__ == "__main__":

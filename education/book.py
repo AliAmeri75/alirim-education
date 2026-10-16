@@ -15,6 +15,7 @@ from education.pof_model import (
 )
 from education.visuals import (
     pipe_defect_figure,
+    pipe_stress_directions_figure,
     render_linked_defect_views,
 )
 from platform_ui import render_learning_cards, render_learning_path, render_project_hero
@@ -171,6 +172,18 @@ def chapter_pipe_stress() -> None:
         "- **Hoop stress, $\\sigma_h$:** acts around the circumference.\n"
         "- **Longitudinal stress, $\\sigma_L$:** acts along the pipe axis.\n"
         "- $p$ is internal pressure, $D$ is diameter, and $t$ is wall thickness."
+    )
+
+    st.subheader("See the directions in 3D")
+    st.plotly_chart(
+        pipe_stress_directions_figure(),
+        width="stretch",
+        config={"displaylogo": False},
+    )
+    st.caption(
+        "Rotate the pipe with your mouse. Blue arrows wrap around the pipe (hoop "
+        "stress), green arrows run along the pipe (longitudinal stress), and yellow "
+        "arrows show internal pressure pushing outward."
     )
 
     st.subheader("Interactive pipe-stress calculator")

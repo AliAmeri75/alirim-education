@@ -404,3 +404,199 @@ def pipe_defect_figure(
         margin={"l": 0, "r": 0, "t": 55, "b": 0},
     )
     return figure
+
+
+def pipe_stress_directions_figure() -> go.Figure:
+    """Show pressure, hoop stress, and longitudinal stress on a 3D pipe.
+
+    The geometry is deliberately schematic: the goal is to teach the direction
+    of each action rather than reproduce a finite-element stress field.
+    """
+
+    pipe_half_length = 2.25
+    pipe_radius = 1.0
+    axial = np.linspace(-pipe_half_length, pipe_half_length, 72)
+    theta = np.linspace(0.0, 2.0 * np.pi, 80)
+    xx, tt = np.meshgrid(axial, theta)
+    yy = pipe_radius * np.cos(tt)
+    zz = pipe_radius * np.sin(tt)
+
+    figure = go.Figure(
+        go.Surface(
+            x=xx,
+            y=yy,
+            z=zz,
+            surfacecolor=np.zeros_like(xx),
+            colorscale=[[0.0, "#dce8df"], [1.0, "#dce8df"]],
+            opacity=0.78,
+            showscale=False,
+            hoverinfo="skip",
+            name="Pipe wall",
+            showlegend=False,
+        )
+    )
+
+    # Draw both end rings so the cylindrical pipe is immediately recognizable.
+    ring_theta = np.linspace(0.0, 2.0 * np.pi, 120)
+    for end_x in (-pipe_half_length, pipe_half_length):
+        figure.add_trace(
+            go.Scatter3d(
+                x=np.full_like(ring_theta, end_x),
+                y=pipe_radius * np.cos(ring_theta),
+                z=pipe_radius * np.sin(ring_theta),
+                mode="lines",
+                line={"color": "#7f9587", "width": 5},
+                hoverinfo="skip",
+                showlegend=False,
+            )
+        )
+
+    # Hoop stress is tangent to the circumference. Two opposing curved arrows
+    # communicate that the wall is being pulled around the pipe in both senses.
+    hoop_radius = 1.18
+    hoop_arc_a = np.linspace(np.deg2rad(-120), np.deg2rad(58), 70)
+    hoop_arc_b = np.linspace(np.deg2rad(120), np.deg2rad(-58), 70)
+    for trace_index, arc in enumerate((hoop_arc_a, hoop_arc_b)):
+        figure.add_trace(
+            go.Scatter3d(
+                x=np.zeros_like(arc),
+                y=hoop_radius * np.cos(arc),
+                z=hoop_radius * np.sin(arc),
+                mode="lines",
+                line={"color": BLUE, "width": 8},
+                name="Hoop stress — around the pipe",
+                legendgroup="hoop",
+                showlegend=trace_index == 0,
+                hovertemplate=(
+                    "Hoop stress, σh<br>Acts around the pipe circumference"
+                    "<extra></extra>"
+                ),
+            )
+        )
+        end_angle = float(arc[-1])
+        direction = 1.0 if arc[-1] > arc[0] else -1.0
+        figure.add_trace(
+            go.Cone(
+                x=[0.0],
+                y=[hoop_radius * np.cos(end_angle)],
+                z=[hoop_radius * np.sin(end_angle)],
+                u=[0.0],
+                v=[direction * -np.sin(end_angle)],
+                w=[direction * np.cos(end_angle)],
+                anchor="tip",
+                sizemode="absolute",
+                sizeref=0.28,
+                colorscale=[[0.0, BLUE], [1.0, BLUE]],
+                showscale=False,
+                hoverinfo="skip",
+                showlegend=False,
+            )
+        )
+
+    # Longitudinal stress runs parallel to the pipe axis and pulls the closed
+    # pipe wall in opposite axial directions.
+    longitudinal_y = -1.17
+    for trace_index, direction in enumerate((-1.0, 1.0)):
+        start_x = 0.35 * direction
+        tip_x = 2.55 * direction
+        figure.add_trace(
+            go.Scatter3d(
+                x=[start_x, tip_x],
+                y=[longitudinal_y, longitudinal_y],
+                z=[0.0, 0.0],
+                mode="lines",
+                line={"color": GREEN, "width": 9},
+                name="Longitudinal stress — along the pipe",
+                legendgroup="longitudinal",
+                showlegend=trace_index == 0,
+                hovertemplate=(
+                    "Longitudinal stress, σL<br>Acts along the pipe axis"
+                    "<extra></extra>"
+                ),
+            )
+        )
+        figure.add_trace(
+            go.Cone(
+                x=[tip_x],
+                y=[longitudinal_y],
+                z=[0.0],
+                u=[direction],
+                v=[0.0],
+                w=[0.0],
+                anchor="tip",
+                sizemode="absolute",
+                sizeref=0.31,
+                colorscale=[[0.0, GREEN], [1.0, GREEN]],
+                showscale=False,
+                hoverinfo="skip",
+                showlegend=False,
+            )
+        )
+
+    # Pressure acts normal to the inside wall. Four radial arrows keep the
+    # diagram readable while showing that the load pushes outward everywhere.
+    pressure_angles = np.deg2rad([35.0, 145.0, 215.0, 325.0])
+    for trace_index, angle in enumerate(pressure_angles):
+        start_radius = 0.38
+        tip_radius = 0.88
+        radial_y = np.cos(angle)
+        radial_z = np.sin(angle)
+        figure.add_trace(
+            go.Scatter3d(
+                x=[0.0, 0.0],
+                y=[start_radius * radial_y, tip_radius * radial_y],
+                z=[start_radius * radial_z, tip_radius * radial_z],
+                mode="lines",
+                line={"color": GOLD, "width": 7},
+                name="Internal pressure — pushes outward",
+                legendgroup="pressure",
+                showlegend=trace_index == 0,
+                hovertemplate=(
+                    "Internal pressure, p<br>Pushes outward on the pipe wall"
+                    "<extra></extra>"
+                ),
+            )
+        )
+        figure.add_trace(
+            go.Cone(
+                x=[0.0],
+                y=[tip_radius * radial_y],
+                z=[tip_radius * radial_z],
+                u=[0.0],
+                v=[radial_y],
+                w=[radial_z],
+                anchor="tip",
+                sizemode="absolute",
+                sizeref=0.24,
+                colorscale=[[0.0, GOLD], [1.0, GOLD]],
+                showscale=False,
+                hoverinfo="skip",
+                showlegend=False,
+            )
+        )
+
+    figure.update_layout(
+        title="Stress directions in a pressurized pipe",
+        paper_bgcolor="rgba(0,0,0,0)",
+        font={"family": "Inter, Arial, sans-serif", "color": "#14251c"},
+        legend={
+            "orientation": "h",
+            "yanchor": "bottom",
+            "y": -0.04,
+            "xanchor": "center",
+            "x": 0.5,
+        },
+        scene={
+            "xaxis": {"visible": False},
+            "yaxis": {"visible": False},
+            "zaxis": {"visible": False},
+            "bgcolor": "rgba(0,0,0,0)",
+            "camera": {"eye": {"x": 1.55, "y": -1.7, "z": 1.05}},
+            "aspectmode": "manual",
+            "aspectratio": {"x": 2.15, "y": 1.0, "z": 1.0},
+        },
+        height=540,
+        margin={"l": 0, "r": 0, "t": 55, "b": 60},
+        hoverlabel={"bgcolor": "#ffffff", "font": {"color": "#14251c"}},
+    )
+    return figure
