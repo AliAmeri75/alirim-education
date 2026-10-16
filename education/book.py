@@ -772,8 +772,8 @@ if "book_chapter_selector" not in st.session_state:
 
 with st.sidebar:
     st.header("Learning Book")
-    chapter_index = st.selectbox(
-        "Chapter",
+    chapter_index = st.radio(
+        "Chapters",
         options=list(range(len(CHAPTERS))),
         format_func=lambda index: f"{index + 1}. {CHAPTERS[index]}",
         key="book_chapter_selector",

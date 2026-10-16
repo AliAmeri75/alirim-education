@@ -47,6 +47,24 @@ def apply_global_style() -> None:
             backdrop-filter: blur(13px); border-bottom: 1px solid #eef2ef; }
         [data-testid="stSidebar"] { background: #f7f9f7;
             border-right: 1px solid #e3eae5; box-shadow: 8px 0 28px rgba(20,49,32,.025); }
+        [data-testid="stSidebar"] [role="radiogroup"] {
+            display: grid; gap: .34rem; margin-top: .35rem;
+        }
+        [data-testid="stSidebar"] [role="radiogroup"] label {
+            margin: 0; padding: .48rem .58rem; background: #ffffff;
+            border: 1px solid #dfe7e1; border-radius: 9px;
+            transition: background .16s ease, border-color .16s ease, box-shadow .16s ease;
+        }
+        [data-testid="stSidebar"] [role="radiogroup"] label:hover {
+            background: #f1f6f2; border-color: rgba(39,93,56,.38);
+        }
+        [data-testid="stSidebar"] [role="radiogroup"] label:has(input:checked) {
+            background: #e8f1eb; border-color: rgba(39,93,56,.5);
+            box-shadow: inset 4px 0 0 var(--ua-green);
+        }
+        [data-testid="stSidebar"] [role="radiogroup"] label p {
+            font-size: .86rem; line-height: 1.25; color: var(--ink);
+        }
         .block-container { max-width: 1200px; padding-top: 1.35rem; padding-bottom: 4rem; }
         .platform-hero, .project-hero {
             position: relative; overflow: hidden; padding: 1.55rem 1.75rem 1.7rem;
